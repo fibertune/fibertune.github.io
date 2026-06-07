@@ -1,0 +1,413 @@
+:root {
+  --ink: #171717;
+  --muted: #5d6470;
+  --soft: #f5f6f8;
+  --line: #dde1e8;
+  --panel: #ffffff;
+  --accent: #c7511f;
+  --accent-soft: #f7e5dc;
+  --button: #2d2d2d;
+  --button-hover: #151515;
+  --shadow: 0 14px 34px rgb(15 23 42 / 8%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: #fbfbfc;
+  font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, ui-sans-serif, system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+img,
+video {
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+.container {
+  width: min(1120px, calc(100vw - 36px));
+  margin: 0 auto;
+}
+
+.narrow {
+  width: min(900px, calc(100vw - 36px));
+}
+
+.hero {
+  padding: 64px 0 28px;
+  background:
+    radial-gradient(circle at 22% 12%, rgb(199 81 31 / 10%), transparent 28%),
+    linear-gradient(180deg, #ffffff 0%, #f8f9fb 100%);
+  border-bottom: 1px solid var(--line);
+}
+
+.hero-inner {
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin: 0 0 12px;
+  font-size: clamp(54px, 8.5vw, 92px);
+  font-weight: 780;
+  line-height: 0.96;
+  letter-spacing: 0;
+}
+
+.subtitle {
+  max-width: 980px;
+  margin: 0 auto 18px;
+  font-size: clamp(24px, 3vw, 38px);
+  font-weight: 680;
+  line-height: 1.15;
+}
+
+.authors {
+  max-width: 930px;
+  margin: 0 auto 8px;
+  color: #273244;
+  font-size: 18px;
+  font-weight: 620;
+}
+
+.affiliations {
+  max-width: 960px;
+  margin: 0 auto;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.button-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 26px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: var(--button);
+  color: #fff;
+  font-weight: 720;
+  text-decoration: none;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 14%);
+  transition: background 130ms ease, transform 130ms ease;
+}
+
+.button:hover {
+  background: var(--button-hover);
+  transform: translateY(-1px);
+}
+
+.icon {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+}
+
+.icon svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.section {
+  padding: 54px 0;
+}
+
+.video-section {
+  padding-top: 34px;
+}
+
+.band {
+  background: #fff;
+  border-block: 1px solid var(--line);
+}
+
+.section-heading {
+  max-width: 940px;
+  margin: 0 auto 24px;
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 16px;
+  text-align: center;
+  font-size: clamp(29px, 4vw, 42px);
+  font-weight: 760;
+  line-height: 1.15;
+}
+
+h3 {
+  margin-bottom: 8px;
+  font-size: 21px;
+  line-height: 1.25;
+}
+
+.section-lead {
+  max-width: 900px;
+  margin: 0 auto 24px;
+  color: #374151;
+  text-align: center;
+}
+
+.video-card,
+.figure-card,
+.release-card,
+.metric {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.video-card {
+  padding: 10px;
+}
+
+.video-card video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+  background: #111827;
+}
+
+.page-nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-block: 1px solid var(--line);
+  background: rgb(255 255 255 / 92%);
+  backdrop-filter: blur(10px);
+}
+
+.page-nav .container {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  flex-wrap: wrap;
+  padding: 10px 0;
+}
+
+.page-nav a {
+  color: #334155;
+  font-size: 14px;
+  font-weight: 760;
+  text-decoration: none;
+}
+
+.page-nav a:hover {
+  color: var(--accent);
+}
+
+.method-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.4fr);
+  gap: 24px;
+  align-items: center;
+}
+
+.method-grid article {
+  color: #303846;
+}
+
+.check-list {
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.check-list li {
+  position: relative;
+  margin: 10px 0;
+  padding-left: 24px;
+}
+
+.check-list li::before {
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  color: var(--accent);
+  content: "✓";
+  font-weight: 800;
+}
+
+.figure-card {
+  margin: 0;
+  padding: 12px;
+}
+
+.figure-card.large {
+  padding: 14px;
+}
+
+.figure-card img {
+  display: block;
+  width: 100%;
+  border-radius: 6px;
+}
+
+figcaption {
+  margin: 10px 4px 0;
+  color: var(--muted);
+  font-size: 14px;
+  text-align: center;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.metric {
+  padding: 18px;
+}
+
+.metric span {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.metric strong {
+  display: block;
+  margin: 6px 0;
+  color: #1f2937;
+  font-size: 29px;
+  line-height: 1.1;
+}
+
+.metric p {
+  margin: 0;
+  color: #4b5563;
+}
+
+.split-figures {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.release-card {
+  padding: 22px;
+}
+
+.release-card p:last-child {
+  margin-bottom: 0;
+}
+
+.release-links {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.text-link {
+  color: var(--accent);
+  font-weight: 740;
+  text-decoration: none;
+}
+
+.text-link:hover {
+  text-decoration: underline;
+}
+
+pre {
+  overflow-x: auto;
+  margin: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #111827;
+  color: #f8fafc;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.footer {
+  padding: 24px 0;
+  color: var(--muted);
+  text-align: center;
+}
+
+.footer p {
+  margin: 0;
+}
+
+@media (max-width: 840px) {
+  .method-grid,
+  .split-figures,
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding-top: 48px;
+  }
+
+  .section {
+    padding: 42px 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .container,
+  .narrow {
+    width: min(100vw - 24px, 1120px);
+  }
+
+  .button {
+    min-width: 128px;
+  }
+
+  .page-nav .container {
+    gap: 14px;
+  }
+}

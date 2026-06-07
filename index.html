@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FiberTune: Preserving Action-Fiber Visual Residuals</title>
+    <meta
+      name="description"
+      content="FiberTune preserves action-fiber visual residuals during vision-language-action model fine-tuning without inference-time overhead."
+    />
+    <meta property="og:title" content="FiberTune" />
+    <meta
+      property="og:description"
+      content="Preserving action-fiber visual residuals in VLA fine-tuning."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="static/assets/video_poster.png" />
+    <link rel="stylesheet" href="static/css/style.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="container hero-inner">
+        <p class="eyebrow">Vision-Language-Action Fine-Tuning</p>
+        <h1>FiberTune</h1>
+        <p class="subtitle">
+          Preserving Action-Fiber Visual Residuals in Vision-Language-Action Fine-Tuning
+        </p>
+        <p class="authors">
+          Haihao Lin, Xiangsheng Huang, Xiao Yang, Weibang Zhou, Yiqi Zhang,
+          Bo Yang, Simin Zeng, Jiawei Yang, Zhengyang Wang, Jiahui Du
+        </p>
+        <p class="affiliations">
+          University of Chinese Academy of Sciences · Hebei Key Laboratory of Cognitive Intelligence,
+          Xiong'an Institute of Innovation · Hebei University of Technology ·
+          Beijing Information Science and Technology University
+        </p>
+        <div class="button-row" aria-label="Project links">
+          <a class="button" href="#paper">
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z" /><path d="M14 3v5h5" /><path d="M9 13h8" /><path d="M9 17h6" /></svg>
+            </span>
+            <span>Paper soon</span>
+          </a>
+          <a class="button" href="#video">
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+            </span>
+            <span>Video</span>
+          </a>
+          <a class="button" href="#code">
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="m10 8-4 4 4 4" /><path d="m14 8 4 4-4 4" /></svg>
+            </span>
+            <span>Code soon</span>
+          </a>
+          <a class="button" href="#bibtex">
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M7 7h10" /><path d="M7 12h10" /><path d="M7 17h7" /><path d="M5 3h14v18H5z" /></svg>
+            </span>
+            <span>BibTeX</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section id="video" class="section video-section">
+        <div class="container narrow">
+          <div class="video-card">
+            <video controls playsinline preload="metadata" poster="static/assets/video_poster.png">
+              <source src="static/videos/fibertune_video.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+      </section>
+
+      <nav class="page-nav" aria-label="Page sections">
+        <div class="container">
+          <a href="#abstract">Abstract</a>
+          <a href="#method">Method</a>
+          <a href="#results">Results</a>
+          <a href="#realworld">SO-101</a>
+          <a href="#diagnostics">Diagnostics</a>
+          <a href="#code">Release</a>
+        </div>
+      </nav>
+
+      <section id="abstract" class="section">
+        <div class="container narrow">
+          <h2>Abstract</h2>
+          <p>
+            Action-supervised fine-tuning of VLA policies fits demonstrations effectively but
+            constrains only the directions that change predicted actions, leaving visual structure
+            consistent across action-equivalent states free to collapse.
+          </p>
+          <p>
+            FiberTune is a training-time objective that preserves teacher-structured visual
+            residuals without adding inference-time overhead. It uses an online action probe to
+            estimate action-predictive feature directions, filters them from intermediate token
+            representations, and aligns the resulting probe-filtered residuals to a frozen visual
+            teacher while regularizing their effective rank.
+          </p>
+          <p>
+            Under matched training conditions, FiberTune improves over task-loss-only fine-tuning
+            across controlled simulation settings spanning CALVIN, LIBERO, pi0.5, and OpenVLA-OFT,
+            and improves physical SO-101 pick-place success. Residual diagnostics show increased
+            probe-filtered residual teacher alignment and effective rank, consistent with the
+            action-fiber motivation.
+          </p>
+        </div>
+      </section>
+
+      <section id="method" class="section band">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Method</p>
+            <h2>Residual preservation after action-probe filtering</h2>
+          </div>
+          <div class="method-grid">
+            <article>
+              <h3>What FiberTune changes</h3>
+              <p>
+                Task loss directly supervises action prediction, but it does not specify how much
+                action-equivalent visual structure should remain in intermediate representations.
+                FiberTune adds a training-only side path that estimates action-predictive feature
+                directions and applies the complementary filter before visual preservation.
+              </p>
+              <ul class="check-list">
+                <li>Action probe estimates locally action-predictive directions.</li>
+                <li>Residual branch aligns centered token directions to a frozen teacher.</li>
+                <li>Effective-rank prior discourages low-rank residual collapse.</li>
+                <li>Teacher, probe, and adapter are removed after fine-tuning.</li>
+              </ul>
+            </article>
+            <figure class="figure-card large">
+              <img src="static/assets/fibertune_method.svg" alt="FiberTune method diagram" />
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="results" class="section">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Results</p>
+            <h2>Matched fine-tuning comparisons</h2>
+          </div>
+          <p class="section-lead">
+            Each comparison fixes the environment, model family, training start, data, budget,
+            evaluator, and model-selection rule before comparing task-loss-only fine-tuning with
+            FiberTune.
+          </p>
+          <div class="figure-card">
+            <img src="static/assets/main_results.svg" alt="Main FiberTune simulation results" />
+          </div>
+          <div class="metric-grid">
+            <article class="metric">
+              <span>CALVIN ABC to D</span>
+              <strong>+10.7 pp</strong>
+              <p>Five-subtask success gain for pi0.5 from the adapted start.</p>
+            </article>
+            <article class="metric">
+              <span>LIBERO</span>
+              <strong>2 model families</strong>
+              <p>Gains are reported for pi0.5 and OpenVLA-OFT under matched protocols.</p>
+            </article>
+            <article class="metric">
+              <span>SO-101</span>
+              <strong>128 trials</strong>
+              <p>Physical pick-place trials include three training colors and a held-out green block.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="realworld" class="section band">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Physical Robot Evaluation</p>
+            <h2>SO-101 pick-place with held-out color generalization</h2>
+          </div>
+          <p class="section-lead">
+            We evaluate matched policies on a physical SO-101 setup using the instruction
+            "pick up the {color} block and put it into the black box". Yellow, orange, and purple
+            are in-distribution colors; green is held out from training.
+          </p>
+          <div class="split-figures">
+            <figure class="figure-card">
+              <img src="static/assets/realworld_start_end.png" alt="SO-101 color-specific start and end examples" />
+              <figcaption>Color-specific start and end examples from the physical setup.</figcaption>
+            </figure>
+            <figure class="figure-card">
+              <img src="static/assets/realworld_placement_schedule.png" alt="SO-101 placement schedule" />
+              <figcaption>Shared placement schedule for each color and policy.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="diagnostics" class="section">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">Diagnostics</p>
+            <h2>Residual geometry tracks the behavioral gains</h2>
+          </div>
+          <p class="section-lead">
+            FiberTune increases teacher alignment and effective rank in the probe-filtered residual,
+            while avoiding a full-token alignment pressure that can over-emphasize aggregate visual
+            similarity.
+          </p>
+          <div class="figure-card">
+            <img src="static/assets/mechanism_diagnostics.svg" alt="Residual CKA and effective-rank diagnostics" />
+          </div>
+        </div>
+      </section>
+
+      <section id="paper" class="section band">
+        <div class="container narrow">
+          <h2>Paper and Release</h2>
+          <div class="release-card">
+            <p>
+              The arXiv link will be added after the public record is available. Code and data
+              links will be added with the public repository release.
+            </p>
+            <div class="release-links">
+              <a class="text-link" href="#bibtex">BibTeX</a>
+              <a class="text-link" href="static/videos/fibertune_video.mp4">Download video</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="code" class="section">
+        <div class="container narrow">
+          <h2>Code</h2>
+          <p>
+            Coming soon. The public repository will include training and evaluation entry points,
+            figure export scripts, environment notes, and lightweight paper assets separated from
+            large checkpoints and rollout logs.
+          </p>
+        </div>
+      </section>
+
+      <section id="bibtex" class="section band">
+        <div class="container narrow">
+          <h2>BibTeX</h2>
+          <pre><code>@article{lin2026fibertune,
+  title   = {FiberTune: Preserving Action-Fiber Visual Residuals in Vision-Language-Action Fine-Tuning},
+  author  = {Lin, Haihao and Huang, Xiangsheng and Yang, Xiao and Zhou, Weibang and Zhang, Yiqi and Yang, Bo and Zeng, Simin and Yang, Jiawei and Wang, Zhengyang and Du, Jiahui},
+  journal = {arXiv preprint},
+  year    = {2026}
+}</code></pre>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p>FiberTune project page. Built as a static site for GitHub Pages.</p>
+      </div>
+    </footer>
+  </body>
+</html>

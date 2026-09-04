@@ -90,6 +90,13 @@ h1 {
   line-height: 1.15;
 }
 
+.venue {
+  margin: -4px auto 14px;
+  color: #17633a;
+  font-size: 17px;
+  font-weight: 720;
+}
+
 .authors {
   max-width: 930px;
   margin: 0 auto 8px;

@@ -1,8 +1,10 @@
 # FiberTune Project Page
 
-This repository is a static GitHub Pages project page for FiberTune.
+This repository is the static GitHub Pages project page for FiberTune, accepted at CoRL 2026.
 
 Paper: https://arxiv.org/abs/2606.08653
+
+OpenReview: https://openreview.net/forum?id=yNHgrgATuY
 
 Deploy options:
 

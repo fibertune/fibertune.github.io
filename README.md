@@ -8,6 +8,11 @@ OpenReview: https://openreview.net/forum?id=yNHgrgATuY
 
 Code: https://github.com/fibertune/FiberTune
 
+Content synchronized on 2026-10-19 with the submitted camera-ready
+manuscript (`../paper/camera-ready.tex`): method summary, CALVIN/LIBERO
+component ablations, and optional residual-content evidence. Existing video and
+figure assets remain unchanged.
+
 Deploy options:
 
 1. Push this directory as the root of a GitHub Pages repository.

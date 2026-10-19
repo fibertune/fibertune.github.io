@@ -139,6 +139,7 @@
           <a href="#abstract">Abstract</a>
           <a href="#method">Method</a>
           <a href="#results">Results</a>
+          <a href="#ablations">Ablations</a>
           <a href="#realworld">SO-101</a>
           <a href="#diagnostics">Diagnostics</a>
           <a href="#code">Release</a>
@@ -149,23 +150,24 @@
         <div class="container narrow">
           <h2>Abstract</h2>
           <p>
-            Action-supervised fine-tuning of VLA policies fits demonstrations effectively but
-            constrains only the directions that change predicted actions, leaving visual structure
-            consistent across action-equivalent states free to collapse.
+            Action-supervised fine-tuning of vision-language-action (VLA) policies can compress
+            visual structure that is weakly constrained by the action objective. We formalize this
+            as residual visual collapse along local action fibers.
           </p>
           <p>
             FiberTune is a training-time objective that preserves teacher-structured visual
             residuals without adding inference-time overhead. It uses an online action probe to
             estimate action-predictive feature directions, filters them from intermediate token
-            representations, and aligns the resulting probe-filtered residuals to a frozen visual
-            teacher while regularizing their effective rank.
+            representations, and preserves the resulting residuals through centered directional
+            alignment with a frozen visual teacher and effective-rank regularization.
           </p>
           <p>
             Under matched training conditions, FiberTune improves over task-loss-only fine-tuning
-            across controlled simulation settings spanning CALVIN, LIBERO, pi0.5, and OpenVLA-OFT,
-            and improves physical SO-101 pick-place success. Residual diagnostics show increased
-            probe-filtered residual teacher alignment and effective rank, consistent with the
-            action-fiber motivation.
+            in all six simulation settings spanning CALVIN and LIBERO with pi0.5 and OpenVLA-OFT,
+            and improves physical SO-101 pick-and-place success. Representative gains include
+            CALVIN ABC-to-D SR(5) increasing from 61.4% to 72.1% and SO-101 success from 72.7%
+            to 78.1%. Representation analyses support the preservation of visual information
+            in the residuals.
           </p>
         </div>
       </section>
@@ -180,14 +182,12 @@
             <article>
               <h3>What FiberTune changes</h3>
               <p>
-                Task loss directly supervises action prediction, but it does not specify how much
-                action-equivalent visual structure should remain in intermediate representations.
-                FiberTune adds a training-only side path that estimates action-predictive feature
-                directions and applies the complementary filter before visual preservation.
+                FiberTune preserves visual structure in a training-only residual branch
+                alongside the policy's action-prediction path.
               </p>
               <ul class="check-list">
-                <li>Action probe estimates locally action-predictive directions.</li>
-                <li>Residual branch aligns centered token directions to a frozen teacher.</li>
+                <li>A shared online action probe estimates action-predictive directions; a complementary filter constructs the visual residual.</li>
+                <li>Teacher alignment compares centered, normalized token directions from the residual and frozen visual teacher.</li>
                 <li>Effective-rank prior discourages low-rank residual collapse.</li>
                 <li>Teacher, probe, and adapter are removed after fine-tuning.</li>
               </ul>
@@ -203,12 +203,11 @@
         <div class="container">
           <div class="section-heading">
             <p class="eyebrow">Results</p>
-            <h2>Matched fine-tuning comparisons</h2>
+            <h2>Simulation results</h2>
           </div>
           <p class="section-lead">
-            Each comparison fixes the environment, model family, training start, data, budget,
-            evaluator, and model-selection rule before comparing task-loss-only fine-tuning with
-            FiberTune.
+            We evaluate pi0.5 on CALVIN and LIBERO and OpenVLA-OFT on LIBERO,
+            using general and adapted starting checkpoints.
           </p>
           <div class="figure-card">
             <img src="static/assets/main_results.svg" alt="Main FiberTune simulation results" />
@@ -222,14 +221,37 @@
             <article class="metric">
               <span>LIBERO</span>
               <strong>2 model families</strong>
-              <p>Gains are reported for pi0.5 and OpenVLA-OFT under matched protocols.</p>
+              <p>FiberTune improves LIBERO success with both pi0.5 and OpenVLA-OFT.</p>
             </article>
             <article class="metric">
               <span>SO-101</span>
               <strong>128 trials</strong>
-              <p>Physical pick-place trials include three training colors and a held-out green block.</p>
+              <p>Per policy, across three training colors and a held-out green block.</p>
             </article>
           </div>
+        </div>
+      </section>
+
+      <section id="ablations" class="section band">
+        <div class="container narrow">
+          <h2>Component ablations</h2>
+          <p class="section-lead">
+            Rank regularization recovers most of the gain on CALVIN, while teacher alignment
+            is the stronger single-loss variant on LIBERO. The full method performs best on both.
+          </p>
+          <table class="results-table">
+            <caption>Adapted pi0.5 checkpoints; success rates in percent.</caption>
+            <thead><tr><th scope="col">Variant</th><th scope="col">CALVIN<br>SR(5)</th><th scope="col">LIBERO<br>success</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Task-loss baseline</th><td>61.4</td><td>95.75</td></tr>
+              <tr><th scope="row">Full-token alignment</th><td>58.3</td><td>96.55</td></tr>
+              <tr><th scope="row">Full-token alignment + rank</th><td>65.6</td><td>95.15</td></tr>
+              <tr><th scope="row">Residual alignment</th><td>66.2</td><td>96.25</td></tr>
+              <tr><th scope="row">Residual rank only</th><td>70.5</td><td>95.80</td></tr>
+              <tr><th scope="row">FiberTune</th><td><strong>72.1</strong></td><td><strong>97.10</strong></td></tr>
+            </tbody>
+          </table>
+          <p class="table-note">Residual rank only retains the learned action probe and filter.</p>
         </div>
       </section>
 
@@ -237,10 +259,10 @@
         <div class="container">
           <div class="section-heading">
             <p class="eyebrow">Physical Robot Evaluation</p>
-            <h2>SO-101 pick-place with held-out color generalization</h2>
+            <h2>SO-101 pick-and-place</h2>
           </div>
           <p class="section-lead">
-            We evaluate matched policies on a physical SO-101 setup using the instruction
+            We evaluate FiberTune on an SO-101 robot using the instruction
             "pick up the {color} block and put it into the black box". Yellow, orange, and purple
             are in-distribution colors; green is held out from training.
           </p>
@@ -261,16 +283,24 @@
         <div class="container">
           <div class="section-heading">
             <p class="eyebrow">Diagnostics</p>
-            <h2>Residual geometry tracks the behavioral gains</h2>
+            <h2>Preserved residual visual structure</h2>
           </div>
           <p class="section-lead">
-            FiberTune increases teacher alignment and effective rank in the probe-filtered residual,
-            while avoiding a full-token alignment pressure that can over-emphasize aggregate visual
-            similarity.
+            FiberTune increases teacher CKA and effective rank in the probe-filtered residual
+            across all six evaluated settings.
           </p>
           <div class="figure-card">
             <img src="static/assets/mechanism_diagnostics.svg" alt="Residual CKA and effective-rank diagnostics" />
           </div>
+          <details class="visual-evidence">
+            <summary>Controlled color interventions and semantic readouts</summary>
+            <p>Changing block color while holding the command, robot state, geometry, and
+              optimal-action label fixed reveals amplified visual responses in the probe-filtered residual.</p>
+            <p>A dimension-matched readout of five object-location and slot-occupancy targets
+              achieves 77.09% macro balanced accuracy in the FiberTune residual, compared with
+              51.16% in its probe-predictive component, using scene-split cross-validation.
+              See Appendix C.8 for details.</p>
+          </details>
         </div>
       </section>
 

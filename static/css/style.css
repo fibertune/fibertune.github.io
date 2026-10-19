@@ -160,6 +160,7 @@ h1 {
 
 .section {
   padding: 54px 0;
+  scroll-margin-top: 48px;
 }
 
 .video-section {
@@ -340,6 +341,59 @@ figcaption {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
   align-items: start;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.results-table caption,
+.table-note {
+  color: var(--muted);
+  font-size: 14px;
+  text-align: left;
+  margin: 12px 0;
+}
+
+.results-table th,
+.results-table td {
+  border-bottom: 1px solid var(--line);
+  padding: 12px 8px;
+  text-align: right;
+}
+
+.results-table th:first-child {
+  width: 58%;
+  text-align: left;
+}
+
+.results-table tbody th {
+  font-weight: 500;
+}
+
+.results-table tbody tr:last-child {
+  background: var(--soft);
+}
+
+.visual-evidence {
+  margin-top: 24px;
+  padding-block: 18px;
+  border-block: 1px solid var(--line);
+}
+
+.visual-evidence summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.visual-evidence[open] summary {
+  margin-bottom: 16px;
+}
+
+.visual-evidence p:last-child {
+  margin-bottom: 0;
 }
 
 .release-card {
